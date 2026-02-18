@@ -57,3 +57,51 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+# Comt Reporting System - Realtime Module
+
+Este proyecto es un sistema de reportería avanzado desarrollado con **Laravel 11** y **Livewire 3**. Utiliza una infraestructura de WebSockets nativa para actualizaciones en tiempo real sin recargar la página.
+
+## 🚀 Tecnologías Realtime Instaladas
+
+Para lograr la comunicación bidireccional, se han configurado los siguientes componentes:
+
+### 1. Backend (Servidor)
+* **Laravel Reverb**: Servidor de WebSockets de alta velocidad desarrollado específicamente para Laravel.
+* **Pusher PHP SDK**: (`pusher/pusher-php-server`) Utilizado por Laravel para emitir eventos compatibles con el protocolo Pusher hacia Reverb.
+
+### 2. Frontend (Cliente)
+* **Laravel Echo**: Librería de JavaScript que facilita la suscripción a canales y la escucha de eventos.
+* **Pusher JS**: Cliente oficial de Pusher necesario para la conexión por debajo de Echo.
+
+### 3. Livewire 3 - Fullstack Framework
+
+Se utiliza **Livewire** para manejar la interfaz dinámica sin salir de Laravel. En este proyecto, Livewire actúa como el "escuchador" de los eventos que emite el servidor de WebSockets.
+
+### 1. Instalación y Assets
+Livewire 3 se instaló mediante Composer. Los assets se cargan automáticamente en Laravel 11, pero se asegura su funcionamiento con:
+```bash
+composer require livewire/livewire
+
+---
+
+## 🛠️ Configuración del Entorno (.env)
+
+El instalador de Reverb ha configurado las siguientes variables en tu archivo `.env`. Asegúrate de que coincidan para el entorno local:
+
+```env
+BROADCAST_CONNECTION=reverb
+
+REVERB_APP_ID=tu_app_id
+REVERB_APP_KEY=tu_app_key
+REVERB_APP_SECRET=tu_app_secret
+REVERB_HOST="127.0.0.1"
+REVERB_PORT=8080
+REVERB_SCHEME=http
+
+VITE_REVERB_APP_KEY="${REVERB_APP_KEY}"
+VITE_REVERB_HOST="${REVERB_HOST}"
+VITE_REVERB_PORT="${REVERB_PORT}"
+VITE_REVERB_SCHEME="${REVERB_SCHEME}"
+
