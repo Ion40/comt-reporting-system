@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('nombre');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
@@ -22,8 +22,14 @@ return new class extends Migration
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('email')->index();
             $table->string('token');
+            //fecha de expiracion del token
+            $table->timestamp('expires_at');
+            //campo para saber si el token ya fue usado
+            $table->boolean('is_used')->default(false);
             $table->timestamp('created_at')->nullable();
         });
 
