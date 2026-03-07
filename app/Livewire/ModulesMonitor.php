@@ -4,7 +4,9 @@ namespace App\Livewire;
 
 use App\Models\Modules;
 use App\Models\Permissions;
+use App\Models\PermissionUser;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -40,14 +42,6 @@ class ModulesMonitor extends Component
         $this->getModules();
     }
 
-    public function updatedUserId($id)
-    {
-        if ($id) {
-            // Lógica para cargar los permisos actuales del usuario seleccionado
-            // Ejemplo: $this->loadUserPermissions($id);
-        }
-    }
-
     //funcion para marcar los checkboxes de cada fila
     public function checkAllRow($moduleId) {
         $this->selectedPermissions = $this->selectedPermissions ?? [];
@@ -66,10 +60,27 @@ class ModulesMonitor extends Component
 
     public function render()
     {
-        $users = User::orderBy('nombre')->get();
+     return view('livewire.modules-monitor');
+    }
 
-        return view('livewire.modules-monitor', [
-            'users' => $users
-        ]);
+    #[On('user-selected')]
+    public function updateSelectedUser($id)
+    {
+        // Si enviaste {id: 9} desde JS, extraemos el valor
+        $this->userId = is_array($id) ? $id['id'] : $id;
+
+        if ($this->userId) {
+            // Consulta a la tabla pivote de permisos
+            $this->selectedPermissions = DB::table('permission_user')
+                ->where('user_id', $this->userId)
+                ->get()
+                ->map(function ($row) {
+                    // Generamos el string 'moduloID_permisoID' para que coincida con el value del checkbox
+                    return $row->module_id . '_' . $row->permission_id;
+                })
+                ->toArray();
+        } else {
+            $this->selectedPermissions = [];
+        }
     }
 }

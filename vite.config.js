@@ -11,6 +11,10 @@ export default defineConfig({
         tailwindcss(),
     ],
     server: {
+        host: '0.0.0.0', // Permite conexiones externas al servidor de Vite
+        hmr: {
+            host: '192.168.1.203', // La IP de tu PC
+        },
         watch: {
             ignored: ['**/storage/framework/views/**'],
         },

@@ -10,6 +10,8 @@
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{asset("/images/logo_oficial.png")}}">
 
+    <link href="{{asset("/css/sweetalert2.min.css")}}" rel="stylesheet" type="text/css"/>
+
     <!-- Vendor css -->
     <link href="{{asset("/css/vendor.min.css")}}" rel="stylesheet" type="text/css"/>
 
@@ -18,6 +20,9 @@
 
     <!-- Icons css -->
     <link href="{{asset("/css/icons.min.css")}}" rel="stylesheet" type="text/css"/>
+
+    <link href="{{asset("/css/dataTables.bootstrap5.min.css")}}" rel="stylesheet" type="text/css"/>
+
     <style>
         @font-face {
             font-family: 'ComtechFont'; /* El nombre que tú quieras darle */
@@ -42,6 +47,16 @@
             width: 100%;
             height: 100%;
             border: none;
+        }
+
+        /* Estilo para los textos del menú */
+        .side-nav-link .menu-text {
+            overflow: visible;
+            white-space: normal;
+            height: auto;
+            background: inherit;
+            position: relative;
+            z-index: 10;
         }
     </style>
 
@@ -109,31 +124,7 @@
                 </div>
             </div>
 
-            <!--- Sidenav Menu -->
-            <ul class="side-nav">
-                <li class="side-nav-item">
-                    <a data-bs-toggle="collapse" href="#sidebarContacts" aria-expanded="false" aria-controls="sidebarContacts" class="side-nav-link">
-                        <span class="menu-icon"><i class="ti ti-shield-cog"></i></span>
-                        <span class="menu-text"> Autorizaciones</span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <div class="collapse" id="sidebarContacts">
-                        <ul class="sub-menu">
-                            <li class="side-nav-item">
-                                <a href="{{ route("permission.index")  }}" class="side-nav-link">
-                                    <span class="menu-text">Administrar Permisos</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="side-nav-item">
-                    <a href="{{ route("dashboard")  }}" class="side-nav-link">
-                        <span class="menu-icon"><i class="ti ti-dashboard"></i></span>
-                        <span class="menu-text"> Compras e Importaciones </span>
-                    </a>
-                </li>
-            </ul>
+           <livewire:permisos-actualizados/>
 
             <div class="clearfix"></div>
         </div>
@@ -197,13 +188,17 @@
 <!-- App js -->
 <script src="{{asset("/js/app.js")}}"></script>
 
-<!-- Apex Chart js -->
-<script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+<script src="{{asset("/js/sweetalert2.min.js")}}"></script>
 
-<!-- Projects Analytics Dashboard App js -->
-<script src="assets/js/pages/dashboard.js"></script>
+<script src="{{asset("/js/dataTables.min.js")}}"></script>
+<script src="{{asset("/js/dataTables.bootstrap5.min.js")}}"></script>
+
+<script>
+    const header = { 'X-CSRF-TOKEN': "{{csrf_token()}}" };
+</script>
 
 @stack('scripts')
+
 </body>
 
 </html>

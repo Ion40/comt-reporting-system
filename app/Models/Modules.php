@@ -17,4 +17,10 @@ class Modules extends Model
         'show_menu',
         'order_menu'
     ];
+
+    public function reportIframe()
+    {
+        // Relación 1 a 1: Un módulo puede tener un registro de Iframe
+        return $this->hasOne(ReportIframe::class, 'module_id');
+    }
 }

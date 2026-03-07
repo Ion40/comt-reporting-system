@@ -10,4 +10,17 @@ class PermissionController extends Controller
     {
         return view('permission.index');
     }
+
+    //TODO: cambiar a controlador de Reportes nombrado segun el modulo
+    public function costos_import()
+    {
+        return view('permission.costos_import');
+    }
+
+
+    //Vista de "Bajo Mantenimiento"
+    public function underMaintenance()
+    {
+        return view('bajo-mantenimiento');
+    }
 }
