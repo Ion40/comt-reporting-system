@@ -18,6 +18,18 @@ class Modules extends Model
         'order_menu'
     ];
 
+    // Relación para obtener el nombre del padre
+    public function parent()
+    {
+        return $this->belongsTo(Modules::class, 'parent_id');
+    }
+
+// Relación opcional para contar hijos si lo necesitas después
+    public function children()
+    {
+        return $this->hasMany(Modules::class, 'parent_id');
+    }
+
     public function reportIframe()
     {
         // Relación 1 a 1: Un módulo puede tener un registro de Iframe

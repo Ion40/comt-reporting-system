@@ -1,6 +1,3 @@
-document.addEventListener("livewire:initialized", () => {
-});
-
 async function deleteIframeFn(slug) {
     Swal.fire({
         title: '¿Estás seguro?',
@@ -19,13 +16,15 @@ async function deleteIframeFn(slug) {
                 title: 'Procesando...',
                 showConfirmButton: false,
                 allowOutsideClick: false,
-                didOpen: () => { Swal.showLoading(); }
+                didOpen: () => {
+                    Swal.showLoading();
+                }
             });
 
 
             try {
                 const url = deleteIframe.replace(':url_path', slug);
-                const res = await fetch(url,{
+                const res = await fetch(url, {
                     method: 'PUT',
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
@@ -60,4 +59,27 @@ async function deleteIframeFn(slug) {
             }
         }
     })
+}
+
+function initSelect2(component) {
+    $('#select-modulo').select2(
+        {
+            theme: 'bootstrap-5' ,
+            width: window.innerWidth < 768 ? '100%' : '200px',
+            placeholder: 'Seleccione un grupo',
+        }
+    )
+        .on('change', function (e) {
+            component.set('modulo', e.target.value);
+        });
+
+    $('#select-orden').select2(
+        {
+            theme: 'bootstrap-5',
+            width: window.innerWidth < 768 ? '100%' : '200px',
+            placeholder: 'Seleccione el orden',
+        })
+        .on('change', function (e) {
+            component.set('orden', e.target.value);
+        });
 }

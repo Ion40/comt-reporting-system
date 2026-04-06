@@ -22,6 +22,8 @@ class User extends Authenticatable
         'nombre',
         'email',
         'password',
+        'require_password_change',
+        'id_estado'
     ];
 
     /**
@@ -45,5 +47,31 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getAvatarColorAttribute() {
+        $colors = ['primary', 'success', 'info', 'danger', 'secondary', 'warning'];
+
+        // Usamos el ID para determinar el índice.
+        // Si el ID es nulo (usuario no guardado), devolvemos el primero por defecto.
+        $index = $this->id ? ($this->id % count($colors)) : 0;
+
+        return $colors[$index];
+    }
+
+    public function getInitialsAttribute()
+    {
+        $names = explode(' ', $this->nombre);
+        $initials = '';
+
+        if (count($names) >= 2) {
+            // Toma la primera letra del primer nombre y del primer apellido
+            $initials = strtoupper(substr($names[0], 0, 1) . substr($names[1], 0, 1));
+        } else {
+            // Si solo tiene un nombre, toma las dos primeras letras
+            $initials = strtoupper(substr($this->nombre, 0, 2));
+        }
+
+        return $initials;
     }
 }

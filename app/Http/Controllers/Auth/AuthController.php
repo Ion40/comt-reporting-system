@@ -52,6 +52,14 @@ class AuthController extends Controller
             ])->withInput();
         }
 
+        //Verificar estado del usuario
+        // Suponiendo que 1 es 'ACTIVO' según tu tabla de estados
+        if ($user->id_estado != 1) {
+            return back()->withErrors([
+                'correo' => 'Su cuenta no se encuentra activa. Contacte al administrador del sistema.'
+            ])->withInput();
+        }
+
         // Login exitoso: reiniciar contador de intentos
         RateLimiter::clear($key);
 
@@ -62,7 +70,7 @@ class AuthController extends Controller
         $request->session()->regenerate();
 
         // Redirigir a la ruta deseada después del login
-        return redirect()->intended('/underMaintenance');
+        return redirect()->route('users.profile');
     }
 
     public function logout(Request $request)

@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" data-layout="">
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark">
 
 <head>
     <meta charset="utf-8"/>
-    <title>Dashboard | Adminto - Responsive Bootstrap 5 Admin Dashboard</title>
+    <title>{{ config("app.name")  }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Coderthemes" name="author"/>
 
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{asset("/images/logo_oficial.png")}}">
@@ -58,6 +57,38 @@
             position: relative;
             z-index: 10;
         }
+
+        /* Ajuste para que el Select2 respete el espacio del label flotante */
+        .form-floating > .select2-container .select2-selection--single {
+            height: 58px !important; /* Altura estándar de form-floating */
+            padding-top: 1.6rem !important;
+        }
+
+        /* Forzar al label interno a estar siempre en la parte superior */
+        .form-floating > .select2-container + label {
+            transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem) !important;
+            opacity: 0.8;
+            z-index: 5;
+            pointer-events: none; /* Permite clickear el select a través del label */
+        }
+
+        /* Ajuste del texto seleccionado dentro de Select2 */
+        .form-floating > .select2-container .select2-selection__rendered {
+            padding-left: 0.75rem !important;
+            line-height: 1.2 !important;
+            margin-top: 5px !important;
+        }
+
+        /* Alineación de la flechita de Select2 */
+        .form-floating > .select2-container .select2-selection__arrow {
+            top: 50% !important;
+            transform: translateY(-10%) !important;
+        }
+
+        .table-responsive {
+            overflow: visible !important;
+        }
+
     </style>
 
     {{-- OBLIGATORIO --}}
@@ -79,13 +110,13 @@
         <!-- Brand Logo -->
         <a href="index.html" class="logo">
                     <span class="logo-light">
-                        <span class="logo-lg"><img src="{{asset("/images/logo_oficial.png")}}" alt="logo"></span>
-                        <span class="logo-sm"><img src="{{asset("/images/logo_oficial.png")}}" alt="small logo"></span>
+                        <span class="logo-lg"><img loading="lazy" src="{{asset("/images/logo_oficial.png")}}" alt="logo"></span>
+                        <span class="logo-sm"><img loading="lazy" src="{{asset("/images/logo_oficial.png")}}" alt="small logo"></span>
                     </span>
 
             <span class="logo-dark">
-                        <span class="logo-lg"><img src="{{asset("/images/logo_oficial.png")}}" alt="dark logo"></span>
-                        <span class="logo-sm"><img src="{{asset("/images/logo_oficial.png")}}" alt="small logo"></span>
+                        <span class="logo-lg"><img loading="lazy" src="{{asset("/images/logo_oficial.png")}}" alt="dark logo"></span>
+                        <span class="logo-sm"><img loading="lazy" src="{{asset("/images/logo_oficial.png")}}" alt="small logo"></span>
                     </span>
         </a>
 
@@ -112,8 +143,9 @@
                     <a class="topbar-link dropdown-toggle text-reset drop-arrow-none px-2" data-bs-toggle="dropdown"
                        type="button" aria-haspopup="false" aria-expanded="false">
                         <!-- todo: poner imagen de usuario -->
-                        <img src="{{asset("/images/user.png")}}" width="46" class=""
-                             alt="user-image">
+                        <div class="avatar-xl mx-auto">
+                            <span class="avatar-title bg-soft-{{ Auth::user()->avatar_color }} text-{{ Auth::user()->avatar_color }} rounded-circle fw-bold fs-28 border border-{{ Auth::user()->avatar_color }} border-opacity-10 shadow-sm rounded-circle fw-bold fs-24">{{ Auth::user()->initials }}</span>
+                        </div>
                         <span class="d-flex justify-content-center gap-1 sidenav-user-name my-2">
                                     <span>
                                         <span class="mb-0 fw-semibold lh-base fs-15">{{ Auth::user()->nombre }}</span>
@@ -180,21 +212,131 @@
 @livewireScripts
 
 <!-- Theme Config Js -->
-<script src="{{asset("/js/config.js")}}"></script>
+<script defer src="{{asset("/js/config.js")}}"></script>
 
 <!-- Vendor js -->
-<script src="{{asset("/js/vendor.min.js")}}"></script>
+<script  src="{{asset("/js/vendor.min.js")}}"></script>
 
 <!-- App js -->
-<script src="{{asset("/js/app.js")}}"></script>
+<script defer src="{{asset("/js/app.js")}}"></script>
 
-<script src="{{asset("/js/sweetalert2.min.js")}}"></script>
+<script defer src="{{asset("/js/sweetalert2.min.js")}}"></script>
 
-<script src="{{asset("/js/dataTables.min.js")}}"></script>
-<script src="{{asset("/js/dataTables.bootstrap5.min.js")}}"></script>
+<script defer src="{{asset("/js/dataTables.min.js")}}"></script>
+<script defer src="{{asset("/js/dataTables.bootstrap5.min.js")}}"></script>
 
 <script>
     const header = { 'X-CSRF-TOKEN': "{{csrf_token()}}" };
+
+    const validateField = (element, length = null) => {
+        // IMPORTANTE: Si el elemento o su contenedor están ocultos, no validamos
+        if (!element.offsetParent && element.type !== 'hidden') {
+            element.classList.remove("is-invalid", "is-valid");
+            return true;
+        }
+
+        const value = element.value.trim();
+        const fieldName = element.dataset.valid || "Este campo";
+        let bandera = true,
+            message = '';
+
+        // Limpiamos estados previos
+        element.classList.remove("is-invalid", "is-valid");
+
+        // Para Select2, quitamos la clase del contenedor visual también
+        if (element.classList.contains('select2-hidden-accessible')) {
+            $(element).next('.select2-container').find('.select2-selection').removeClass('is-invalid is-valid');
+        }
+
+        const existingFeedback = element.parentElement.querySelector(".invalid-tooltip");
+        if (existingFeedback) existingFeedback.remove();
+
+        // --- LÓGICA DE VALIDACIÓN ---
+        if (value === "" || value === null) {
+            bandera = false;
+            message = `${fieldName} es obligatorio`;
+        } else if (length && value.length < length) { // Cambiado a < para ser más preciso
+            bandera = false;
+            message = `${fieldName} debe tener al menos ${length} caracteres`;
+        }
+
+        // Validación de Email
+        if (bandera && element.type === 'email') {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(value)) {
+                bandera = false;
+                message = "Ingresa un correo electrónico válido";
+            }
+        }
+
+        // Validación de Password
+        if (bandera && (element.id === 'confirm_pass_input')) {
+            const password = document.getElementById("password_input").value;
+            if (value !== password) {
+                bandera = false;
+                message = `Las contraseñas no coinciden`;
+            }
+        }
+
+        // --- APLICACIÓN DE RESULTADOS ---
+        if (!bandera) {
+            element.classList.add("is-invalid");
+
+            // Soporte para Select2 (resaltar el buscador)
+            if (element.classList.contains('select2-hidden-accessible')) {
+                $(element).next('.select2-container').find('.select2-selection').addClass('is-invalid');
+            }
+
+            // Insertar Tooltip
+            element.insertAdjacentHTML("afterend", `<div class="invalid-tooltip">${message}</div>`);
+            return false;
+        } else {
+            element.classList.add("is-valid");
+            return true;
+        }
+    };
+
+    const language_datatable = {
+        "decimal": "",
+        "emptyTable": "No hay información",
+        "info": "Mostrando _START_ a _END_ de _TOTAL_ Registros",
+        "infoEmpty": "Mostrando 0 a 0 de 0 Registros",
+        "infoFiltered": "(Filtrado de _MAX_ total registros)",
+        "infoPostFix": "",
+        "thousands": ",",
+        "lengthMenu": "Mostrar _MENU_ Registros",
+        "loadingRecords": "Cargando...",
+        "processing": "Procesando...",
+        "search": '<i class="ti ti-search"></i> Buscar:',
+        "zeroRecords": "Sin resultados encontrados",
+        "paginate": {
+            "first": "Primero",
+            "last": "Ultimo",
+            "next": "Siguiente",
+            "previous": "Anterior"
+        }
+    };
+
+    document.addEventListener('livewire:init', () => {
+        Livewire.hook('request', ({ fail }) => {
+            fail(({ status, preventDefault }) => {
+                if (status === 419) {
+                    // Prevenimos el mensaje por defecto de Livewire
+                    preventDefault();
+
+                    // Usamos SweetAlert2 (que ya tienes en tu layout) para avisar
+                    Swal.fire({
+                        title: 'Sesión Expirada',
+                        text: 'Tu sesión ha caducado por inactividad. Serás redirigido al login.',
+                        icon: 'warning',
+                        confirmButtonText: 'Aceptar'
+                    }).then(() => {
+                        window.location.reload(); // Esto lo mandará al login automáticamente
+                    });
+                }
+            });
+        });
+    });
 </script>
 
 @stack('scripts')

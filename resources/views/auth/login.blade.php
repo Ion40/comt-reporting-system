@@ -43,7 +43,7 @@
                 <img src="{{asset("/images/logo_oficial.png")}}" alt="logo light" height="26" class="logo-light">
             </a>
 
-            <p class="fw-semibold mb-4 text-center  fs-15">Bienvenido a Com. Reporting System</p>
+            <p class="fw-semibold mb-4 text-center  fs-15">Bienvenido a Reporting System</p>
 
             <div class="card overflow-hidden text-center p-xxl-4 p-3 mb-0">
 
@@ -84,7 +84,7 @@
                             <label class="form-check-label" for="checkbox-signin">Recuérdame</label>
                         </div>
 
-                        <a href="auth-recoverpw.html" class="text-muted border-bottom border-dashed">
+                        <a href="{{ route("recover.index")  }}" class="text-muted border-bottom border-dashed">
                             ¿Olvidó su contraseña?
                         </a>
                     </div>

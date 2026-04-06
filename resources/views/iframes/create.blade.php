@@ -36,48 +36,62 @@
                         <form>
                             @csrf
                             <div class="mb-3">
-                                <label class="form-label">Módulo Padre</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="ti ti-question-mark fs-4"></i></span>
-                                    @if($isEdit)
-                                        <input type="hidden" name="" id="id_iframe" value="{{ $iframe->iframe_id  }}">
-                                    @endif
-                                    <input type="hidden" name="module_id" id="id_module_input" value="{{ $iframe->module_id ?? '' }}">
-                                    <input type="text"
-                                           name="parent_id_input"
-                                           id="parent_id_input" class="form-control"
-                                           placeholder="Módulo"
-                                           value="{{ $iframe->parent_name ?? '' }}"
-                                           disabled>
+                                    <div class="form-floating">
+                                        @if($isEdit)
+                                            <input type="hidden" name="" id="id_iframe"
+                                                   value="{{ $iframe->iframe_id  }}">
+                                        @endif
+                                        <input type="hidden" name="module_id" id="id_module_input"
+                                               value="{{ $iframe->module_id ?? '' }}">
+                                        <input type="text"
+                                               name="parent_id_input"
+                                               id="parent_id_input" class="form-control"
+                                               placeholder="Módulo"
+                                               value="{{ $iframe->parent_name ?? '' }}"
+                                               disabled>
+                                        <label for="parent_id_input fs-4">Módulo Padre</label>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Submódulo (Destino)</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="ti ti-question-mark fs-4"></i></span>
-                                    <input type="text"
-                                           name="sub_module_input"
-                                           id="sub_module_input" class="form-control"
-                                           placeholder="Submodulo"
-                                           value="{{ $iframe->submodule_name ?? '' }}"
-                                           disabled>
+                                    <div class="form-floating">
+                                        <input type="text"
+                                               name="sub_module_input"
+                                               id="sub_module_input" class="form-control"
+                                               placeholder="Submodulo"
+                                               value="{{ $iframe->submodule_name ?? '' }}"
+                                               disabled>
+                                        <label class="form-label">Submódulo (Destino)</label>
+                                    </div>
                                 </div>
-                                <small class="text-muted">El reporte se mostrará al hacer clic en este submódulo.</small>
+                                <small class="text-primary mt-1 d-block">
+                                    <i class="ti ti-info-circle me-1"></i>
+                                    El reporte se mostrará al hacer clic en este submódulo.
+                                </small>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Url Reporte (Url Submódulo)</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="ti ti-link fs-4"></i></span>
-                                    <input type="text"
-                                           name="module_url_input"
-                                           id="module_url_input" class="form-control"
-                                           placeholder="Url"
-                                           value="{{ $iframe->url_path ?? '' }}"
-                                           disabled>
+                                    <span class="input-group-text"><i class="ti ti-link fs-5"></i></span>
+                                    <div class="form-floating">
+                                        <input type="text"
+                                               name="module_url_input"
+                                               id="module_url_input" class="form-control"
+                                               placeholder="Url"
+                                               value="{{ $iframe->url_path ?? '' }}"
+                                               disabled>
+                                        <label class="form-label">Url Reporte (Url Submódulo)</label>
+                                    </div>
                                 </div>
-                                <small class="text-muted">Url de enlace de acceso (Submódulo).</small>
+                                <small class="text-primary mt-1 d-block">
+                                    <i class="ti ti-info-circle me-1"></i>
+                                    Url de enlace de acceso (Submódulo).
+                                </small>
                             </div>
 
                             <hr>
@@ -85,20 +99,29 @@
                             <h4 class="header-title mb-3">Datos del Reporte</h4>
 
                             <div class="mb-3">
-                                <label class="form-label">Título del Reporte</label>
-                                <input type="text" name="titulo_iframe" class="form-control"
-                                       id="titulo_iframe"
-                                       placeholder="Ej: Resumen de Operaciones 2024"
-                                       value="{{ old('title', $iframe->title ?? '') }}" required>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="ti ti-clipboard-data fs-5"></i></span>
+                                    <div class="form-floating">
+                                        <input type="text" name="titulo_iframe" class="form-control"
+                                               id="titulo_iframe"
+                                               placeholder="Ej: Resumen de Operaciones 2024"
+                                               value="{{ old('title', $iframe->title ?? '') }}" required>
+                                        <label for="titulo_iframe" class="form-label">Título del Reporte</label>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">URL del Iframe (PowerBI)</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="ti ti-link fs-4"></i></span>
-                                    <input type="url" name="iframe_url_input" id="iframe_url_input" class="form-control"
-                                           placeholder="https://app.powerbi.com/view?r=..."
-                                           value="{{ old('iframe_url', $iframe->iframe_url ?? '') }}" required>
+                                    <span class="input-group-text"><i class="ti ti-link fs-5"></i></span>
+                                    <div class="form-floating">
+                                        <input type="url" name="iframe_url_input" id="iframe_url_input"
+                                               class="form-control"
+                                               placeholder="https://app.powerbi.com/view?r=..."
+                                               value="{{ old('iframe_url', $iframe->iframe_url ?? '') }}" required>
+                                        <label for="iframe_url_input" class="form-label">URL del Iframe
+                                            (PowerBI)</label>
+                                    </div>
                                 </div>
                             </div>
 
@@ -137,7 +160,8 @@
                             <p class="text-muted mt-2">Ingrese una URL válida para ver el reporte aquí.</p>
                         </div>
                         <iframe id="iframe-preview" src="{{ $iframe->iframe_url ?? '' }}" frameborder="0"
-                                style="width: 100%; height: 100%; {{ $isEdit ? 'display: block;' : 'display: none;' }}" allowFullScreen="true"></iframe>
+                                style="width: 100%; height: 100%; {{ $isEdit ? 'display: block;' : 'display: none;' }}"
+                                allowFullScreen="true"></iframe>
                     </div>
                 </div>
             </div>

@@ -9,14 +9,14 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class UserController extends Controller
+class APIController extends Controller
 {
     public function search(Request $request)
     {
         $term = $request->term;
 
         $users = User::where('nombre', 'LIKE', "%{$term}%")
-            ->limit(10)
+            //->limit(10)
             ->get()
             ->map(function ($user) {
                 return [
@@ -31,8 +31,18 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::find($id);
-        if (!$user) return response()->json(['message' => 'Usuario no encontrado'], 404);
-        return response()->json($user);
+        if (!$user) return response()->json(
+            [
+                'message' => 'Usuario no encontrado',
+                'success' => false,
+                'data' => null,
+            ]
+            ,404);
+        return response()->json([
+            'message' => 'Usuario encontrado',
+            'success' => true,
+            'data' => $user
+        ], 200);
     }
 
     public function savePermissions(Request $request)

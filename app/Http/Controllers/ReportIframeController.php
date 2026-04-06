@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\IframesEvent;
+use App\Events\PermisosActualizados;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -114,7 +115,10 @@ class ReportIframeController extends Controller
                 }
 
                 // Disparar evento dentro de la transacción
+                //actualizar vista de cards de reportes
                 event(new IframesEvent());
+                //actualizar el menú entero
+                event(new PermisosActualizados(auth()->id()));
 
                 return $message;
             });

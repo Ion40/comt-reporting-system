@@ -18,7 +18,16 @@
             @foreach($config->where('parent_id', null) as $parent)
                 <tr class="table-light">
                     <td colspan="{{ count($permisos) + 2 }}">
-                        <strong><i class="{{ $parent->icon_class }} me-2 fs-4"></i> {{ $parent->name }}</strong>
+                        <div class="d-flex align-items-center gap-2 ">
+                            <div class="avatar-xs">
+                                <div class="h-100 w-100 rounded bg-light p-2 d-flex align-items-center justify-content-center border">
+                                    <i class="{{ $parent->icon_class }} fs-4"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h6 class="fs-5"> {{ $parent->name }}</h6>
+                            </div>
+                        </div>
                     </td>
                 </tr>
                 @foreach($config->where('parent_id', $parent->id) as $child)

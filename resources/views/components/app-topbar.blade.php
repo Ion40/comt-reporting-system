@@ -29,7 +29,7 @@
             <div class="topbar-item d-none d-md-flex px-2">
 
                 <div>
-                    <h4 class="page-title fs-20 fw-semibold mb-0">Dashboard</h4>
+                    <h4 class="page-title fs-20 fw-semibold mb-0">{{ config("app.name") }}</h4>
 
                 </div>
 
@@ -45,8 +45,9 @@
                     <a class="topbar-link dropdown-toggle drop-arrow-none px-2" data-bs-toggle="dropdown"
                        data-bs-offset="0,25" type="button" aria-haspopup="false" aria-expanded="false">
                         <!-- todo: poner imagen de usuario -->
-                        <img src="{{asset("/images/user.png")}}" width="32" class=" me-lg-2 d-flex"
-                             alt="user-image">
+                        <div class="avatar-sm me-2 mx-auto">
+                            <span class="avatar-title bg-{{ Auth::user()->avatar_color }} text-white rounded-circle fw-bold fs-12">{{ Auth::user()->initials }}</span>
+                        </div>
                         <span class="d-lg-flex flex-column gap-1 d-none">
                                         <h5 class="my-0">{{ Auth::user()->nombre }}</h5>
                                     </span>
@@ -59,7 +60,7 @@
                         </div>
 
                         <!-- item-->
-                        <a href="javascript:void(0);" class="dropdown-item">
+                        <a href="{{ route("users.profile")  }}" class="dropdown-item">
                             <i class="ri-account-circle-line me-1 fs-16 align-middle"></i>
                             <span class="align-middle">Mi Perfil</span>
                         </a>

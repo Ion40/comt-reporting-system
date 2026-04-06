@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->boolean('require_password_change')
+                  ->default(false)
+                  ->after('password')
+                  ->comment('Indica si el usuario debe cambiar su clave al iniciar sesión');
+
+            $table->unsignedTinyInteger('id_estado')
+                ->default(1)
+                ->after('require_password_change')
+                ->comment('Se toma el id de la tabla de estados');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('require_password_change');
+            $table->dropColumn('id_estado');
+        });
+    }
+};

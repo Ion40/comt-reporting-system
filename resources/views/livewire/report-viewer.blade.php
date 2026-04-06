@@ -8,24 +8,29 @@
                     </h4>
                 </div>
                 <div class="card-body p-0">
-
-                    @if($modulo->reportIframe && $modulo->reportIframe->is_active)
-                        {{-- CASO 1: DIBUJAR IFRAME --}}
-                        <div class="powerbi-container" style="height: 82vh; background: #fdfdfd;">
-                            <iframe
-                                src="{{ $modulo->reportIframe->iframe_url }}"
-                                frameborder="0"
-                                allowFullScreen="true"
-                                style="width: 100%; height: 100%;">
-                            </iframe>
-                        </div>
+                    @if($modulo && $modulo->reportIframe)
+                        @if($modulo->reportIframe && $modulo->reportIframe->is_active)
+                            {{-- CASO 1: DIBUJAR IFRAME --}}
+                            <div class="powerbi-container" style="height: 82vh; background: #fdfdfd;">
+                                <iframe
+                                    src="{{ $modulo->reportIframe->iframe_url }}"
+                                    frameborder="0"
+                                    allowFullScreen="true"
+                                    loading="lazy"
+                                    style="width: 100%; height: 100%;">
+                                </iframe>
+                            </div>
+                        @else
+                            {{-- CASO 2: CARGAR VISTA BLADE --}}
+                            <div class="p-4">
+                                <x-reporte-inactivo title="{{ $modulo->reportIframe->title  }}" fechaBaja="{{ $modulo->reportIframe->created_at  }}"/>
+                            </div>
+                        @endif
                     @else
-                        {{-- CASO 2: CARGAR VISTA BLADE --}}
-                        <div class="p-4">
-                            <x-reporte-inactivo title="{{ $modulo->reportIframe->title  }}" fechaBaja="{{ $modulo->reportIframe->created_at  }}"/>
+                        <div class="alert alert-warning">
+                            El reporte no está disponible o la URL ha cambiado.
                         </div>
                     @endif
-
                 </div>
             </div>
         </div>

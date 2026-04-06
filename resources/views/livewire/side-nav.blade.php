@@ -15,6 +15,9 @@
                                 <a href="javascript:void(0);"
                                    wire:click.prevent="navegar('{{ $sub->url_path }}', {{ !is_null($sub->has_iframe) ? 'true' : 'false' }})"
                                    class="side-nav-link">
+                                    <span class="">
+                                        <i class="ti ti-corner-down-right text-muted fs-15"></i>
+                                    </span>
                                     <span class="menu-text">{{ $sub->module_name }}</span>
                                 </a>
                             </li>

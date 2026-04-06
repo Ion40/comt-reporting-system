@@ -31,9 +31,13 @@
                                 <i class="ti ti-users me-1"></i> Seleccionar Usuario para Asignar Permisos
                             </label>
                             <div class="input-group">
-                                <select id="user_select" class="select2" data-toggle="select2" data-choices-removeItem>
-                                    <option value="" selected disabled>-- Seleccione un usuario --</option>
-                                </select>
+                                <span class="input-group-text bg-primary text-white"><i class="ti ti-users fs-4"></i></span>
+                                <div class="form-floating">
+                                    <select id="user_select" class="form-select form-select-sm select2 border-primary">
+                                        <option></option>
+                                    </select>
+                                    <label for="user_select" class="text-primary fw-bold">Asignar permisos a:</label>
+                                </div>
                             </div>
                         </div>
 
@@ -57,6 +61,6 @@
             const csrf_token = "{{ csrf_token() }}";
             const apiSaveConfiguration = "{{ route('users.savePermissions') }}";
         </script>
-        <script src="{{asset("/js/custom/modules.js")}}"></script>
+        <script src="{{asset("/js/custom/permissions.js")}}"></script>
     @endpush
 </x-app-layout>
