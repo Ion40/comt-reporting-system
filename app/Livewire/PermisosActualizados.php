@@ -108,7 +108,25 @@ class PermisosActualizados extends Component
     public function refreshPermissions()
     {
         Log::info('Refrescando menú para el usuario: ' . Auth::id());
+        // 1. Recargar el menú (lo que ya hacías)
         $this->loadMenu();
+
+        // 2. VALIDACIÓN REAL-TIME: ¿Aún tengo permiso para estar AQUÍ?
+        $currentPath = request()->segment(1);
+
+        // Buscamos el ID del módulo de la página actual
+        $module = \DB::table('modules')->where('url_path', $currentPath)->first();
+
+        if ($module) {
+            // Si ya no tiene el permiso de Visualizar (ID 1), lo expulsamos
+            if (!auth()->user()->tienePermiso($module->id, 1)) {
+                session()->flash('error', 'Sus permisos han sido actualizados. Acceso denegado.');
+                return $this->redirect(route('users.profile'), navigate: true);
+            }
+        }
+
+        // 3. Notificar al usuario sutilmente
+        $this->dispatch('notify', ['type' => 'info', 'message' => 'Tus permisos han sido actualizados.']);
     }
 
     public function render()

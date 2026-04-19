@@ -17,6 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\CheckPasswordChange::class,
         ]);
+        $middleware->alias([
+            'check.permiso' => \App\Http\Middleware\CheckModulePermission::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

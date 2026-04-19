@@ -74,4 +74,17 @@ class User extends Authenticatable
 
         return $initials;
     }
+
+    public function tienePermiso($moduleId, $actionId)
+    {
+
+        $query = \DB::table('permission_user')
+            ->where('user_id', $this->id)
+            ->where('module_id', $moduleId)
+            ->where('permission_id', $actionId);
+
+        logger("Permiso concedido - Módulo: $moduleId, Acción: $actionId", [$query->count()]);
+
+        return $query->exists();
+    }
 }

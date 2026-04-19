@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
@@ -40,6 +41,12 @@ class AppServiceProvider extends ServiceProvider
                     'message' => 'Demasiados intentos fallidos. Intenta de nuevo en un minuto.'
                 ], 429);
             });
+        });
+
+        //validacion de permisos de visualizacion y acciones
+        Blade::if('canMod', function ($actionId) {
+            $moduleId = view()->shared('currentModuleId');
+            return auth()->check() && $moduleId && auth()->user()->tienePermiso($moduleId, $actionId);
         });
     }
 }

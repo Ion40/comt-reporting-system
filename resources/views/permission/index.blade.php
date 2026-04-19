@@ -5,11 +5,13 @@
                 <div class="card-header d-flex flex-wrap align-items-center gap-2 border-bottom border-dashed">
                     <h4 class="header-title me-auto">Configuración de Permisos</h4>
 
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-outline-secondary">
-                            <i class="ti ti-history me-1"></i> Historial de Cambios
-                        </button>
-                    </div>
+                   @canMod(2)
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-outline-secondary">
+                                <i class="ti ti-history me-1"></i> Historial de Cambios
+                            </button>
+                        </div>
+                    @endcanMod
                 </div>
 
                 <div class="card-body">
